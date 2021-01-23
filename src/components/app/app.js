@@ -1,10 +1,10 @@
 import React from 'react';
+// import GotService from '../../services/gotService.js';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
 import ItemList from '../itemList';
 import CharDetails from '../charDetails';
-
 
 const App = () => {
     return (

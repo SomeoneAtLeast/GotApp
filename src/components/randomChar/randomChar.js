@@ -2,15 +2,10 @@ import React, {Component} from 'react';
 import './randomChar.css';
 import gotService from '../../services/gotService.js';
 import Spinner from '../spinner';
-import ErrorMessage from '../errorMessage';
+import ErrorMessage from '../error';
 
 export default class RandomChar extends Component {
-
-    //this.updateChar(); будет вызван сразу после создания экземпляра
-    constructor() {
-        super();
-        this.updateChar();
-    }
+    // в конструктор можно поместить функции, которые нужно вызывать сразу после создания экземпляра
     // вероятно по новому синтаксису для стейта не нужен конструктор
     gotService = new gotService();
     // loading - это состояние загрузки данных с сервера для отображения заглушки
@@ -19,6 +14,24 @@ export default class RandomChar extends Component {
         char: {},
         loading: true,
         error: false
+    }
+
+    //  componentDidMount - хук при создании компонента
+    // Вызывается после конструктора и рендера
+    // именно тут нужно обращаться к серверу
+    componentDidMount() {
+        this.updateChar();
+        // задаем таймаут
+        // при создании нового экземпляра класса - таймер не сбрасывается, их становится 2-3-44
+        // нужно сбрасывать при удалении компонента
+        this.timerId = setInterval(this.updateChar, 1500);
+    }
+
+    //  componentDidMount - хук при удалении компонента
+    // Вызывается перед удалением дом элементов со страницы
+    componentWillUnmount(){
+        // удаляем интревал
+        clearInterval(this.timerId);
     }
 
     //задает стейт
@@ -30,7 +43,7 @@ export default class RandomChar extends Component {
             loading: false // сбрасывает анимацию загрузки
         })
     }
-    // именно стрелочная функция избавляет от проблем с контекстом
+    // делаем стрелкой, чтобы не было проблем с конетктстом
     // и позволяет не биндить
     onError = (err) => {
         this.setState({
@@ -38,10 +51,10 @@ export default class RandomChar extends Component {
             loading: false
         })
     }
-
-    updateChar() {
-        // const id = Math.floor(Math.random()*140 + 25); //25-140
-        const id = 15000;
+    //превратили в функцию стрелку, чтобы избавиться от проблем с контекстом.
+    updateChar = () => {
+        const id = Math.floor(Math.random()*140 + 25); //25-140
+        // const id = 15000;
         //Тут возвращается промис
         // в then мы что-то с ним делаем
         // char вовзращает объект в нужном виде.

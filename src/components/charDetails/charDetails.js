@@ -40,7 +40,7 @@ export default class CharDetails extends Component {
                 this.setState({char})
             })
 
-            this.foo.bar = 0;
+            // this.foo.bar = 0;
     }
 
     render() {

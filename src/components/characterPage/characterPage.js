@@ -1,23 +1,10 @@
 import React, {Component} from 'react';
-import {Col, Row} from 'reactstrap';
 import ItemList from '../itemList';
-import CharDetails from '../charDetails';
+import CharDetails, {Field} from '../charDetails';
 import ErrorMessage from '../error';
+import RowBlock from '../rowBlock'
 import gotService from '../../services/gotService.js';
 
-// right left - из props
-const RowBlock = ({left, right}) => {
-    return (
-        <Row>
-            <Col md='6'>
-                {left}
-            </Col>
-            <Col md='6'>
-                {right}
-            </Col>
-        </Row>
-    )
-}
 
 export default class CharacterPage extends Component {
     gotService = new gotService();
@@ -41,7 +28,7 @@ export default class CharacterPage extends Component {
 
     // делаем стрелкой, чтобы не было проблем с конетктстом
     // заносит в стетйт выбранного персонажа.
-    onCharSelected = (id) => {
+    onItemSelected = (id) => {
         this.setState({
             selectedChar: id
         })
@@ -54,7 +41,7 @@ export default class CharacterPage extends Component {
 
         const itemList = (
                 <ItemList
-                    onCharSelected={this.onCharSelected}
+                    onItemSelected={this.onItemSelected}
                     getData={this.gotService.getAllCharacters}
                     //Берет объект и возвращает из него что-то конкретное,
                     // что мы хотим получить
@@ -63,7 +50,14 @@ export default class CharacterPage extends Component {
         );
 
         const charDetails = (
-            <CharDetails charId={this.state.selectedChar}/>
+            <CharDetails charId={this.state.selectedChar}>
+                {/* Оба филда получат {char} из charDetails
+                return React.cloneElement(child, {char}) */}
+                <Field field='gender' label='Gender'/>
+                <Field field='born' label='Born'/>
+                <Field field='died' label='Died'/>
+                <Field field='Culture' label='Culture'/>
+            </CharDetails>
         )
 
         return (

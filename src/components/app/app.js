@@ -61,7 +61,7 @@ export default class App extends Component {
                     <Row>
                         <Col md='6'>
                             <ItemList 
-                                onCharSelected={this.onCharSelected}
+                                onItemSelected={this.onItemSelected}
                                 getData={this.gotService.getAllBooks}
                                 // renderItem может отображать и персонажей, и книги, и дома
                                 // она универсальна
@@ -74,7 +74,7 @@ export default class App extends Component {
                     <Row>
                         <Col md='6'>
                             <ItemList 
-                                onCharSelected={this.onCharSelected}
+                                onItemSelected={this.onItemSelected}
                                 getData={this.gotService.getAllHouses}
                                 // renderItem может отображать и персонажей, и книги, и дома
                                 // она универсальна

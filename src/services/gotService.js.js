@@ -10,7 +10,8 @@ export default class GotService {
 // await - показывает где именно нужно ждать.
 // без этого будет ошибка, так как res попытается выполниться раньше,
 // чем поступит ответ.
-    async GetResource (url) {
+// переделываем методы на фукнции стрелки, чтобы контекст зависел от того, где вызываем
+    GetResource = async (url) => {
         // посылает get на url и получает ответ
         // используем apibase
         const res = await fetch(`${this._apiBase}${url}`);
@@ -26,7 +27,7 @@ export default class GotService {
         return await res.json();
     }
 
-    async getAllCharacters() {
+    getAllCharacters = async () => {
         // Метод вернет промис с данными с нужного url
         // ?page=5&pageSize=10
         // ?page=5 - запрос к 5 странице, & - и, Size=10 - 10 персонажей. 
@@ -35,27 +36,27 @@ export default class GotService {
         return res.map(this._transformCharacter)
     }
 
-    async getCharacter(id) {
+    getCharacter = async (id) => {
         const character = await this.GetResource(`/characters/${id}`);
         return this._transformCharacter(character);
     }
 
-    async getAllHouses() {
+    getAllHouses = async () =>  {
         const res =  await this.GetResource(`/houses/`);
         return res.map(this._transformHouse)
     }
 
-    async getHouse(id) {
+    getHouse = async (id) => {
         const house = await this.GetResource(`/houses/${id}/`);
         return this._transformCharacter(house);
     }
 
-    async getAllBooks() {
+    getAllBooks = async () => {
         const res =  await this.GetResource(`/books/`);
         return res.map(this._transformHouse)
     }
 
-    async getBook(id) {
+    getBook = async(id) => {
         const book = await this.GetResource(`/books/${id}/`);
         return this._transformCharacter(book);
     }

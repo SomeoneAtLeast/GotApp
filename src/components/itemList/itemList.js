@@ -1,49 +1,52 @@
 import React, {Component} from 'react';
 import Spinner from '../spinner';
-import gotService from '../../services/gotService.js';
 import './itemList.css';
 
 export default class ItemList extends Component {
-    gotService = new gotService();
 
     state = {
-        charList: null
+        itemList: null
     }
 
     componentDidMount() {
-        // получаем персонажей и заносим в стейт
-        this.gotService.getAllCharacters()
-            .then((charList) => {
+        const {getData} = this.props;
+        // получаем данные и заносим в стейт
+        getData()
+            .then((itemList) => {
                 this.setState({
-                    charList
+                    itemList
                 })
             })
     }
 
     renderItems(arr) {
+        // item - объект, который помещаем на страницу. 
         return arr.map((item, i) => {
+            const {id} = item;
+            // здесь получаем то, что запросили в charactePage
+            // renderItem={(item) => item.name}
+            const label = this.props.renderItem(item);
             return (
             <li 
                 className="list-group-item"
-                key={i}
-                // 5 страница, поэтому 41 + i
-                onClick={() => this.props.onCharSelected(41 + i)}
+                key={id}
+                onClick={() => this.props.onItemSelected(id)}
                 >
-                {item.name}
+                {label}
             </li>
             )
         })
     }
     render() {
 
-        const {charList} = this.state;
+        const {itemList} = this.state;
 
         // если персонажей нет - пусти спиннер.
-        if (!charList) {
+        if (!itemList) {
             return <Spinner/>
         }
 
-        const items = this.renderItems(charList)
+        const items = this.renderItems(itemList)
 
         return (
             <ul className="item-list list-group">

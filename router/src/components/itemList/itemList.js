@@ -2,12 +2,11 @@ import React, {Component} from 'react';
 import './itemList.css';
 import Spinner from '../spinner';
 import PropTypes from 'prop-types';
+import gotService from '../../services/gotService';
 
-export default class ItemList extends Component {
+// нет стейта, можно переделать в функцию.
+ class ItemList extends Component {
 
-    state = {
-        itemList: null
-    }
     // можно прям тут
     // проверка пропсов на верный тип с помощью библиотеки propTypes
     static propTypes = {
@@ -15,17 +14,6 @@ export default class ItemList extends Component {
     // get data должен быть массивом из объектов
     // getData: PropTypes.arrayOf(PropTypes.object)
 
-    }
-
-    componentDidMount() {
-        const {getData} = this.props;
-
-        getData()
-            .then( (itemList) => {
-                this.setState({
-                    itemList
-                })
-            })
     }
 
     renderItems(arr) {
@@ -46,13 +34,8 @@ export default class ItemList extends Component {
     }
 
     render() {
-        const {itemList} = this.state;
-
-        if (!itemList) {
-            return <Spinner/>
-        }
-
-        const items = this.renderItems(itemList);
+        const {data} = this.props;
+        const items = this.renderItems(data);
 
 
         return (
@@ -70,3 +53,38 @@ ItemList.propTypes = {
     // getData: PropTypes.arrayOf(PropTypes.object)
 
 }
+
+// Фукция высшего порядка (функция обертка) HOS(C)
+// может принимать пропс и передавать дальше
+// здесь мы можем собрать логику и отделить ее от отображения
+// View - аргумент в который будем вкладывать компонент, который хотим отобразоить
+const withData = (View, getData) => {
+    // возвращает безымянный класс
+    return class extends Component {
+        state = {
+            data: null
+        }
+
+        componentDidMount() {
+            getData()
+                .then( (data) => {
+                    this.setState({
+                        data
+                    })
+                })
+        }
+
+        render() {
+            const {data} = this.state;
+
+            if (!data) {
+                return <Spinner/>
+            }
+
+            // Собрали все пропсы из главной функции.
+            return <View {...this.props} data={data}/>
+        }
+    }
+}
+const {getAllCharacters} = new gotService();
+export default withData(ItemList, getAllCharacters);

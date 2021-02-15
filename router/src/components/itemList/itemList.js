@@ -1,11 +1,20 @@
 import React, {Component} from 'react';
 import './itemList.css';
 import Spinner from '../spinner';
+import PropTypes from 'prop-types';
 
 export default class ItemList extends Component {
 
     state = {
         itemList: null
+    }
+    // можно прям тут
+    // проверка пропсов на верный тип с помощью библиотеки propTypes
+    static propTypes = {
+    onItemSelected: PropTypes.func,
+    // get data должен быть массивом из объектов
+    // getData: PropTypes.arrayOf(PropTypes.object)
+
     }
 
     componentDidMount() {
@@ -52,4 +61,12 @@ export default class ItemList extends Component {
             </ul>
         );
     }
+}
+
+// проверка пропсов на верный тип с помощью библиотеки propTypes
+ItemList.propTypes = {
+    onItemSelected: PropTypes.func,
+    // get data должен быть массивом из объектов
+    // getData: PropTypes.arrayOf(PropTypes.object)
+
 }
